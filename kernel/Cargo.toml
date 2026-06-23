@@ -14,6 +14,7 @@ publish = false
 #   spin                  — spinlocks (Phase 8 SMP)
 #   uart_16550            — serial port driver
 [dependencies]
+limine = "0.1"
 
 [lib]
 name = "lema"
