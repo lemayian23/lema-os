@@ -1,0 +1,31 @@
+# Rust
+target/
+**/*.rs.bk
+**/*.pdb
+
+# Build artifacts
+build/
+out/
+dist/
+*.iso
+*.img
+*.bin
+*.elf
+*.map
+*.o
+*.a
+
+# QEMU
+.qemu/
+*.qemu
+
+# Logs
+*.log
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
