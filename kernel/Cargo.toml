@@ -7,14 +7,10 @@ description = "Lema OS kernel — Rust + a touch of C/NASM"
 license = "MIT"
 publish = false
 
-# Phase 0: no dependencies. Phase 1+ will add:
-#   bootloader / limine   — Limine bootloader integration
-#   x86_64                — GDT, IDT, instructions, page tables
-#   linked_list_allocator — kernel heap
-#   spin                  — spinlocks (Phase 8 SMP)
-#   uart_16550            — serial port driver
+# Phase 1: using the bootloader crate + bootimage for fast iteration.
+# Limine migration will happen in Phase 2 when we add UEFI + ISO building.
 [dependencies]
-limine = "0.1"
+bootloader = { version = "0.9", features = ["binary"] }
 
 [lib]
 name = "lema"
