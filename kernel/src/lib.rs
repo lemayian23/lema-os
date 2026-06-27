@@ -4,20 +4,9 @@
 
 use core::panic::PanicInfo;
 
-#[used]
-pub static FRAMEBUFFER_REQUEST: limine::FramebufferRequest =
-    limine::FramebufferRequest::new(0);
-
-#[used]
-pub static HHDM_REQUEST: limine::HhdmRequest =
-    limine::HhdmRequest::new(0);
-
-#[used]
-pub static MEMORY_MAP_REQUEST: limine::MemmapRequest =
-    limine::MemmapRequest::new(0);
-
 pub fn init() {
-    // Phase 1 will use FRAMEBUFFER_REQUEST to draw "Lema v0.1" on screen.
+    // Phase 2+ will set up serial, framebuffer, GDT, IDT, etc.
+    // For now, our kernel just halts.
 }
 
 pub fn hlt_loop() -> ! {
