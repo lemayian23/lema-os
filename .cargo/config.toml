@@ -1,2 +1,11 @@
+# Use the bootloader crate's custom target for the bootloader itself.
+[build]
+target = "x86_64-bootloader.json"
+
+# Use bootimage as the runner when we `cargo run` a freestanding binary.
 [target.'cfg(target_os = "none")']
+runner = "bootimage runner"
+
+# Also use bootimage runner when targeting the bootloader json.
+[target.x86_64-bootloader.json]
 runner = "bootimage runner"
