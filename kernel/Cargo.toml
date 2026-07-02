@@ -10,7 +10,7 @@ publish = false
 # Phase 1: using the bootloader crate + bootimage for fast iteration.
 # Limine migration will happen in Phase 2 when we add UEFI + ISO building.
 [dependencies]
-bootloader = { version = "0.9", features = ["binary"] }
+bootloader = "=0.9.33"
 
 [lib]
 name = "lema"
