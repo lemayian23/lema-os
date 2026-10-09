@@ -2,23 +2,14 @@
 name = "lema-kernel"
 version = "0.1.0"
 edition = "2021"
-authors = ["Lema OS Contributors"]
-description = "Lema OS kernel — Rust + a touch of C/NASM"
+description = "Lema OS kernel"
 license = "MIT"
 publish = false
 
-# Phase 1: using the bootloader crate + bootimage for fast iteration.
-# Limine migration will happen in Phase 2 when we add UEFI + ISO building.
 [dependencies]
-bootloader = "=0.9.33"
-
-[lib]
-name = "lema"
-path = "src/lib.rs"
+limine = "0.2"
+spin = "0.9"
 
 [[bin]]
 name = "lema-kernel"
 path = "src/main.rs"
-
-[features]
-default = []

@@ -1,28 +1,65 @@
-// Lema OS kernel — entry point.
-//
-// Phase 0: minimal. The kernel doesn't actually load yet — this file exists
-// so `cargo check` succeeds against the workspace and Phase 1 has a clean
-// place to land `_start`.
-//
-// Phase 1 will replace this with Limine request structures (framebuffer,
-// memory map, RSDP) and a real `_start` symbol that the bootloader jumps to.
-
 #![no_std]
 #![no_main]
 
 use core::panic::PanicInfo;
+use limine::request::FramebufferRequest;
+use limine::BaseRevision;
 
-/// Kernel entry point. Called by Limine after it has switched the CPU to
-/// long mode, set up initial page tables, and loaded our ELF.
+static FRAMEBUFFER_REQUEST: FramebufferRequest = FramebufferRequest::new();
+
+#[used]
+#[unsafe(link_section = ".limine_requests_start")]
+static LIMINE_REQUESTS_START: limine::RequestsStartMarker = limine::RequestsStartMarker::new();
+
+#[used]
+#[unsafe(link_section = ".limine_requests_end")]
+static LIMINE_REQUESTS_END: limine::RequestsEndMarker = limine::RequestsEndMarker::new();
+
+#[unsafe(link_section = ".limine_requests")]
+static BASE_REVISION: BaseRevision = BaseRevision::new();
+
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    lema::init();
-    lema::hlt_loop()
+    // Get framebuffer from Limine
+    let fb_response = FRAMEBUFFER_REQUEST.response()
+        .expect("No framebuffer response");
+    
+    let framebuffers = fb_response.framebuffers();
+    let fb = framebuffers.first().expect("No framebuffer");
+    
+    let addr = fb.address() as *mut u8;
+    let width = fb.width as usize;
+    let height = fb.height as usize;
+    let pitch = fb.pitch as usize;
+    let bpp = fb.bpp as usize;
+
+    // Paint a test pattern: blue gradient
+    for y in 0..height {
+        for x in 0..width {
+            let pixel_offset = y * pitch + x * (bpp / 8);
+            unsafe {
+                let r = (x * 255 / width) as u8;
+                let g = (y * 255 / height) as u8;
+                let b = 200u8;
+                *addr.add(pixel_offset) = b;
+                *addr.add(pixel_offset + 1) = g;
+                *addr.add(pixel_offset + 2) = r;
+            }
+        }
+    }
+
+    hlt_loop()
 }
 
-/// Panic handler. Phase 0 just halts. Phase 3 will replace this with a proper
-/// framebuffer panic screen showing the panic location and message.
+fn hlt_loop() -> ! {
+    loop {
+        unsafe {
+            core::arch::asm!("hlt", options(nomem, nostack, preserves_flags));
+        }
+    }
+}
+
 #[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    lema::panic_handler(info)
+fn panic(_info: &PanicInfo) -> ! {
+    hlt_loop()
 }
