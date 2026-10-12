@@ -1,7 +1,7 @@
 # Lema OS — Project Plan
 
 > A hobby operating system for x86_64, built in Rust and C.
-> **Status:** Phase 0 — Project foundation. Repo, docs, and toolchain only. Not yet booting.
+> **Status:** Phase 1 — Boot to pixels. ✅ Lema boots in QEMU and paints the framebuffer.
 
 This is the canonical living plan. If something in the README or docs contradicts this file, this file wins.
 

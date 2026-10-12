@@ -20,6 +20,9 @@ static BASE_REVISION: BaseRevision = BaseRevision::new();
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
+    // Verify Limine protocol revision is compatible with the crate.
+    assert!(BASE_REVISION.is_supported());
+
     // Get framebuffer from Limine
     let fb_response = FRAMEBUFFER_REQUEST.response()
         .expect("No framebuffer response");
